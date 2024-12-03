@@ -3,6 +3,9 @@
  body{
       transform: scale(0.8); /* Scales content to 80% */
       transform-origin: top left; /* Keeps scaling anchored to the top-left corner */
+      width: 125%; /* Compensates for the reduced scale to maintain full width */
+      height: 125%; /* Compensates for the reduced scale to maintain full height */
+      overflow: hidden; /* Prevents scrollbars from appearing */
 } 
 *,
 ::before,
