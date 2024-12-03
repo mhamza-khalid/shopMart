@@ -1,0 +1,26 @@
+/* keep global css rules here */
+
+/* body{
+  
+} */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+img{
+    max-width: 100%;
+    width: 145px;
+    height: 160px;
+}
+
+button{
+  border: 0px;
+}
