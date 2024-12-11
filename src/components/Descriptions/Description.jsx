@@ -12,7 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 let vertical = 'top';
-let horizontal = 'right';
+let horizontal = 'left';
 
 export default function Description(){
 
@@ -40,12 +40,14 @@ export default function Description(){
                 }
                 return obj;
             })
+            localStorage.setItem("cartItems", JSON.stringify(newCartItems));
             context[1](newCartItems);
             console.log('inside');
             return;
         }
         newCartItems.push({...item, count: 1});
         console.log(newCartItems);
+        localStorage.setItem("cartItems", JSON.stringify(newCartItems));
         context[1](newCartItems);
     };
 
