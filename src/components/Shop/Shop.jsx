@@ -56,11 +56,16 @@ export default function Shop(){
 
       // set state when the data received
       setData(data);
+      localStorage.setItem("data", JSON.stringify(data));
       console.log(data);
     };
+    if(JSON.parse(localStorage.getItem("data")) != null){
+        setData(JSON.parse(localStorage.getItem("data")));
 
-    dataFetch();
-    
+    }
+    else{
+        dataFetch();
+    }
     
     }, []);
 
