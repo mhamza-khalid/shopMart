@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMemo } from 'react';
 
 import Drawer from '@mui/material/Drawer';
 
@@ -27,6 +28,9 @@ export default function Header(){
 
   const navigate = useNavigate();
 
+
+  
+
   function handleClose(){
     setOpen(false);
   }
@@ -37,6 +41,7 @@ export default function Header(){
         return cItem != item
     })
     setCartItems(newItems);
+    localStorage.setItem("cartItems", JSON.stringify(newItems));
     setOpen(true);
     setRemoveItem(item.title)
   }
@@ -49,6 +54,7 @@ export default function Header(){
       }
       return itemC;
     })
+    localStorage.setItem("cartItems", JSON.stringify(newItems));
     setCartItems(newItems);
   }
   function handleSubtractClick(item){
@@ -60,6 +66,7 @@ export default function Header(){
         }
         return itemC;
       })
+      localStorage.setItem("cartItems", JSON.stringify(newItems));
       setCartItems(newItems);
     }
   }
@@ -67,6 +74,7 @@ export default function Header(){
   function handleSubmit(){
     setCartItems([]);
     setOpen(true);
+    localStorage.setItem("cartItems", JSON.stringify([]));
     setRemoveItem(`Order of total $${(Math.round(cartItems.reduce((accumulator ,item) => {return accumulator += (item.count * item.price);}, 0))*100)/100} Confirmed. All items`)
   }
 
@@ -118,8 +126,15 @@ export default function Header(){
       // set state when the data received
       setData(data);
     };
-
-    dataFetch();
+    if(JSON.parse(localStorage.getItem("cartItems")) != null){
+      setCartItems(JSON.parse(localStorage.getItem("cartItems")));
+    }
+    if(JSON.parse(localStorage.getItem("data")) != null){
+      setData(JSON.parse(localStorage.getItem("data")));
+    }
+    else{
+      dataFetch();
+    }
     
     }, []);
 
@@ -138,6 +153,14 @@ export default function Header(){
       }
       setIsOpen(open);
     };
+  
+    const noOfProducts = useMemo(()=>{
+        return cartItems.reduce((accumulator ,item) => {return accumulator += item.count;}, 0)
+    }, [cartItems])
+
+    const totalPrice = useMemo(()=>{
+        return (Math.round(cartItems.reduce((accumulator ,item) => {return accumulator += (item.count * item.price);}, 0))*100)/100
+    }, [cartItems])
 
     return(
       <>
@@ -182,12 +205,12 @@ export default function Header(){
             >
                 {/* Content inside the drawer */}
               <div className={styles.drawer}>
-                <div className={styles.header}>Your Cart ({cartItems.reduce((accumulator ,item) => {return accumulator += item.count;}, 0)})</div>
+                <div className={styles.header}>Your Cart ({noOfProducts})</div>
                 <hr></hr>
                 {cartItems.length > 0 ? 
                 <ul style={{listStyle: 'none'}}>
                   {listItems}
-                  <button onClick={handleSubmit} className={styles.checkout}>Checkout Total ${(Math.round(cartItems.reduce((accumulator ,item) => {return accumulator += (item.count * item.price);}, 0))*100)/100}</button>
+                  <button onClick={handleSubmit} className={styles.checkout}>Checkout Total ${totalPrice}</button>
                 </ul> 
                 
                   : <div className={styles.empty}>Cart is empty. Start by adding items to the cart!</div>}
