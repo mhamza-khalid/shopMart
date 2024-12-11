@@ -37,12 +37,14 @@ export default function Card({item}){
                 }
                 return obj;
             })
+            localStorage.setItem("cartItems", JSON.stringify(newCartItems));
             context[1](newCartItems);
             console.log('inside');
             return;
         }
         newCartItems.push({...item, count: 1});
         console.log(newCartItems);
+        localStorage.setItem("cartItems", JSON.stringify(newCartItems));
         context[1](newCartItems);
     };
 
